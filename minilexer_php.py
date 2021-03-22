@@ -281,7 +281,7 @@ t_COLON= r'\:'
 t_SEMI= r'\;'
 t_NS_SEPARATOR= r'\\'
 
-
+#default function of lex library.
 def t_error(t):
     print ("Lexical error: " + str(t.value[0]))
     t.lexer.skip(1)
@@ -290,23 +290,33 @@ def t_error(t):
 #do not delete it
 lexer = lex.lex()
 
-def test(data, lexer):
-	lexer.input(data)
-	while True:
-		tok = lexer.token()
-		if not tok:
-			break
-		print (tok)
 
+def test(data, lexer):
+	lexer.input(data) #assign the content to the lexer
+	while True: #loops through the entire string extracted from the test document
+		tok = lexer.token() #if is a valid toked proceed to analyze it 
+		if not tok:
+			break   #Close the program if is not a valid token
+		print (tok) #Print the result of the analysis
+
+#Input command verification
 if __name__ == '__main__':
-	if (len(sys.argv) > 1):
-		fin = sys.argv[1]
-	else:
-		fin = 'evaluacion.c'
-	f = open(fin, 'r')
-	data = f.read()
-	print (data)
-	lexer.input(data)
-	test(data, lexer)
-	#input()
+    #if the input command accomplish the conditions, the program is executed
+    if (len(sys.argv) > 1):
+        fin = sys.argv[1] #Assign the test doc address to fin
+        f = open(fin, 'r') #Open the file in read mode, ussing the open function
+        data = f.read() #Copy the content of test doc to variable data
+        print (data) #Print all the content
+        lexer.input(data) #assign the content to the lexer
+        test(data, lexer) #call the funcion that starts the lexical analysis
+    else:
+        print('##############################')
+        print('#')
+        print('#')
+        print('the input mask is = python minilexer_php.py <test doc address> ')
+        print('#')
+        print('#')
+        print('##############################')
+        breakpoint
+    #input()
 
