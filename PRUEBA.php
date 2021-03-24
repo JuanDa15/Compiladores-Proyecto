@@ -3,12 +3,28 @@ $texto = 'hola-mundo-que-hay';
 #$resultado  = str_replace('-', ' ', $texto);
 $resultado  = ('-', ' ', $texto);
 echo $resultado; // hola mundo que hay
+
+    /*
+    rgtrhytjuy,muikuil.,ioñ
+
+    .o.i
+
+    */
+
+    <<
+
+
+    >>
+
+    =
+    ==
+    ===
 ?>
 
 <?php
     $var1 = 5;
     $var2 = 1;
-    echo $var1 > $var2 ? 'var1 es mayor a var2' : 'vaa2 es mayor a var1'; // condicion ? true : false
+    echo $var1 > $var2 ? 'var1 es mayor a var2' . 'vaa2 es mayor a var1'; // condicion ? true : false
 ?>
 
 <?php
@@ -38,8 +54,15 @@ echo $resultado; // hola mundo que hay
 
 <?= 'print this string' ?>
 <?php echo 'print this string' ?>
-<? echo 'this code is within short tags, but will only work '.'if short_open_tag is enabled'; ?>
+<? echo 'this code is within short tags, but will only work '.'if short_open_tag is enabled'; 
+?>
 
-<?php ?>
+<?php 
+    ~
+    xnor
+    &
+    perfbi
+    efvneirugbueg irigheorgho
+?>
 <?= ?>
 <?php echo ?>
