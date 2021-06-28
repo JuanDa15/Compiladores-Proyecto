@@ -1,6 +1,11 @@
 import ply.lex as lex
 import sys
 import re
+# 
+# Nombres:
+#Juan David Osorio Ortiz
+# Johnatan Palacios Londoño
+# Valentina Gomez Isaza 
 # -------------------------------------------------------------------------------------------------------------------
 # ply doc: https://ply.readthedocs.io/en/latest/ply.html
 # pass at the end of some rules are to discard the token, if you want to see the token comment the
@@ -83,35 +88,32 @@ other = [
     # tags
     # reference:
     # https://www.php.net/manual/en/language.basic-syntax.phptags.php
-    'OPEN_TAG', 'OPEN_TAG_ECHO', 'SHORT_ECHO_TAG', 'CLOSE_TAG',
-
+    'OPEN_TAG', 'CLOSE_TAG',
     # Comments
     # reference:
     # https://www.php.net/manual/en/language.basic-syntax.comments.php
     'ONE_LINE_COMMENT', 'MULTI_LINE_COMMENT',
-
     # Variable
-    'VARIABLE', 'NUMBER', 'STRING',
+    'VARIABLE', 'NUMBER', 'STRING','FUNCTION_NAME',
+    # Boolean 
+    'TRUE','FALSE',
 ]
 
 tokens = list(reserved.values()) + other + [
     # Operators
     # reference:
     # http://php.net/manual/en/language.operators.php
-
     # Arithmetic Operators
     'PLUS', 'MINUS', 'TIMES', 'DIVISION', 'MODULO', 'EXPONENTIATION',
-
     # Bitwise Operator
     # ref:
     # https://www.php.net/manual/en/language.operators.bitwise.php 'BITWISE_AND', 
     'BITWISE_OR', 'BITWISE_XOR','BITWISE_NOT',  'SHIFT_LEFT', 'SHIFT_RIGHT',
-
+    
     # Assignment Operators
     'EQUAL', 'TIMES_EQUAL', 'DIVISION_EQUAL', 'MOD_EQUAL', 'PLUS_EQUAL',
     'MINUS_EQUAL', 'SL_EQUAL', 'SR_EQUAL', 'AND_EQUAL', 'OR_EQUAL', 'XOR_EQUAL',
     'CONCAT_EQUAL',
-
     # Comparison Operator
     # LT -> Less than
     # LTE -> Less than or equal
@@ -119,108 +121,31 @@ tokens = list(reserved.values()) + other + [
     # GTE -> Greather than or equal
     # SO -> Spaceship operator
     'EQUALS', 'IDENTICAL', 'NOT_EQUAL', 'NOT_IDENTICAL', 'LT', 'LTE', 'GT', 'GTE', 'SO',
-
     # Execution  Operator
     'BACKTICKS',
-
     # Error control operator
     'AT_SIGN',
-
     # Increment / decrement operators
     # INC -> INCREMENT
     # DEC -> DECREMENT
     'INC', 'DEC',
-
     # Logical Operator
     'AND', 'OR', 'NOT', 'XOR',
-
     # String Operator
     'CONCATENATION',
-
     # OTher operators
     # object operator : ->
     # double arrow : =>
     # double colon : ::
-
     # reference:
     # https://www.php.net/manual/en/language.oop5.paamayim-nekudotayim.php
     # https://www.php.net/manual/en/functions.arrow.php
     # https://www.php.net/manual/en/language.types.object.php
-
     'OBJECT_OPERATOR', 'DOUBLE_ARROW', 'DOUBLE_COLON',
-
     # Symbols
-
     'LPAREN', 'RPAREN', 'LBRACKET', 'RBRACKET', 'LBRACE', 'RBRACE', 'DOLLAR', 'COMMA', 'QUESTION',
-    'COLON', 'SEMI', 'NS_SEPARATOR'
+    'COLON', 'SEMICOLON', 'NS_SEPARATOR','SINGLE_QUOTE', 'AMPERSANT'
 ]
-
-# March reserved words
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'  # Regular expresion for reserved words
-    # with reserved.get(t.value,'ID'), the t.value is send to be find in the reserved words dicc, if it is the
-    # value of 'ID'  is overwritten by the dicc value equivalent to t.type:
-    t.type = reserved.get(t.value, 'ID')    # Check for reserved words
-    #If the value  is not found in the dicc by default the returned value is ID
-    #if it happens the function t_error if is diferent the token is returned
-    if t.type == 'ID': 
-        t_error(t)
-    else:
-        return t
-
-# Other
-# Newline
-def t_NEWLINE(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
-# tags
-def t_OPEN_TAG(t):
-    r'<[?]((php([ ]echo)?)|=)'
-    if '=' in t.value:
-        t.type = 'SHORT_ECHO_TAG'
-    elif 'echo' in t.value:
-        t.type = 'OPEN_TAG_ECHO'
-    t.lexer.lineno += t.value.count("\n")
-    return t
-
-
-def t_CLOSE_TAG(t):
-    r'[?]>(\t\n\r)?'
-    t.lexer.lineno += t.value.count("\n")
-    return t
-
-# comments
-
-
-def t_ONE_LINE_COMMENT(t):
-    r'[ |\t]*?(\/\/(.|\t| )*|\#(.|\t| )*)'
-    t.lexer.lineno += t.value.count("\n")
-    # return t
-    pass
-
-
-def t_MULTI_LINE_COMMENT(t):
-    r'\/\*(.|\n)*?\*\/'
-    t.lexer.lineno += t.value.count("\n")
-    # return t
-    pass
-
-# others
-def t_VARIABLE(t):
-    r'\$[A-Za-z_][\w_]*'
-    return t
-
-
-def t_NUMBER(t):
-    r'(\+|\-)?[0-9][0-9]*((.[0-9][0-9]*((e|E)(\-|\+)?[0-9][0-9]*(.[0-9][0-9]*))?)|(e|E)(\-|\+)?[0-9][0-9]*)?'
-    return t
-
-
-def t_STRING(t):
-    r'(\".*?(?<!\\)\") | (\'.*?(?<!\\)\')'
-    return t
-
 
 # Ignored characters
 t_ignore = " \t\r"
@@ -291,8 +216,78 @@ t_DOLLAR = r'\$'
 t_COMMA = r'\,'
 t_QUESTION = r'\?'
 t_COLON = r'\:'
-t_SEMI = r'\;'
+t_SEMICOLON = r'\;'
 t_NS_SEPARATOR = r'\\'
+t_SINGLE_QUOTE = r'\''
+t_AMPERSANT = r'\&'
+
+def t_FUNCTION_NAME(t):
+    r'function[ ][a-zA-Z_][a-zA-Z_0-9]*'
+    return t
+    
+# March reserved words
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'  # Regular expresion for reserved words
+    # with reserved.get(t.value,'ID'), the t.value is send to be find in the reserved words dicc, if it is the
+    # value of 'ID'  is overwritten by the dicc value equivalent to t.type:
+    t.type = reserved.get(t.value, 'ID')    # Check for reserved words
+    #If the value  is not found in the dicc by default the returned value is ID
+    #if it happens the function t_error if is diferent the token is returned
+    if t.type == 'ID': 
+        t_error(t)
+    else:
+        return t
+
+# Other
+# Newline
+def t_NEWLINE(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+# tags
+def t_OPEN_TAG(t):
+    r'(<\?|<%)php'
+    t.lexer.lineno += t.value.count("\n")
+    return t
+
+def t_CLOSE_TAG(t):
+    r'[?]>(\t\n\r)?'
+    t.lexer.lineno += t.value.count("\n")
+    return t
+
+# comments
+def t_ONE_LINE_COMMENT(t):
+    r'[ |\t]*?(\/\/(.|\t| )*|\#(.|\t| )*)'
+    t.lexer.lineno += t.value.count("\n")
+    # return t
+    pass
+
+def t_MULTI_LINE_COMMENT(t):
+    r'\/\*(.|\n)*?\*\/'
+    t.lexer.lineno += t.value.count("\n")
+    # return t
+    pass
+
+# others
+def t_VARIABLE(t):
+    r'\$[A-Za-z_][\w_]*'
+    return t
+
+def t_NUMBER(t):
+    r'(\+|\-)?[0-9]+((.[0-9]+((e|E)(\-|\+)?[0-9]+(.[0-9]+))?)|(e|E)(\-|\+)?[0-9]+)?'
+    return t
+
+def t_STRING(t):
+    r'(\".*?(?<!\\)\") | (\'.*?(?<!\\)\')'
+    return t
+
+def t_FALSE(t):
+    r'false'
+    return t
+
+def t_TRUE(t):
+    r'true'
+    return t
 
 # default function of lex library.
 def t_error(t):
@@ -308,12 +303,9 @@ def t_error(t):
     print("Lexical error '%s'" % word)
     t.lexer.skip(1)
 
-
-
 # this line is used to build the lexer
 # do not delete it
 lexer = lex.lex()
-
 
 def test(data, lexer):
     lexer.input(data)  # assign the content to the lexer
@@ -322,7 +314,6 @@ def test(data, lexer):
         if not tok:
             break# Close the program if is not a valid token
         print(tok)  # Print the result of the analysis
-
 
 # Input command verification
 if __name__ == '__main__':
