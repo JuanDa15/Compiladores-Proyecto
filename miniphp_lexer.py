@@ -63,7 +63,6 @@ tokens = (
     'EQUAL',
 
     # Comparison Operator
-    'DISTINT', 
     'LESS',
     'LESSEQUAL',
     'GREATER',
@@ -102,11 +101,10 @@ t_LPAREN = r'\('
 t_RPAREN  = r'\)'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
-t_LBLOCK   = r'{'
-t_RBLOCK   = r'}'
+t_LBLOCK   = r'\{'
+t_RBLOCK   = r'\}'
 t_COLON   = r':'
 t_AMPERSANT = r'\&'
-t_DISTINT = r'!'
 
 # Reserved words
 def t_FALSE(t):
@@ -274,7 +272,7 @@ if __name__ == '__main__':
         # Open the file in read mode, ussing the open function
         f = open(fin, 'r')
         data = f.read()  # Copy the content of test doc to variable data
-        print(data)  # Print all the content
+        #print(data)  # Print all the content
         lexer.input(data)  # assign the content to the lexer
         test(data, lexer)  # call the funcion that starts the lexical analysis
     else:

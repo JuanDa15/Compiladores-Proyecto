@@ -46,7 +46,6 @@ function recursividad($a)
   
   while($j<=$i)
   {
-    $v1 = $variable + $v1;
     echo "*&nbsp&nbsp";
   }
   
@@ -55,7 +54,8 @@ function recursividad($a)
 class ClaseSencilla
 {
     // Declaración de una propiedad
-    public $var = 'un valor predeterminado';
+    public $var = 0;
+    private $car = 0;
 
     // Declaración de un método
     public function mostrarVar() {

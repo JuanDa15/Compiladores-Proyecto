@@ -1,67 +1,68 @@
 import ply.yacc as yacc
-from minilexer_php import tokens
-import minilexer_php
+from miniphp_lexer import tokens
+import miniphp_lexer
 import sys
 
 VERBOSE = 1
 
 def p_program(p):
-    'program: OPEN_TAG declaration_list CLOSE_TAG'
+    'program : OPEN_TAG declaration_list CLOSE_TAG'
     pass
 
 def p_declaration_list_1(p):
-    'declaration_list: declaration_list declaration'
+    'declaration_list : declaration_list declaration'
     pass
 
 def p_declaration_list_2(p):
-    'declaration_list: declaration'
+    'declaration_list : declaration'
     pass
 
 def p_declaration(p):
-    '''declaration: var_declaration
-                            | fun_declaration
-                            | header_declaration
-                            | class_declaration
-                            | print_stmt
-                            | selection_stmt
-                            | iteration_stmt
+    '''declaration : var_declaration
+									| fun_declaration
+									| header_declaration
+									| class_declaration
+									| print_stmt
+									| selection_stmt
+									| iteration_stmt
     '''
     pass
 
 def p_print_stmt(p):
     '''print_stmt : print_stmt ECHO STRING SEMICOLON
-                                | print_stmt ECHO ID SEMICOLON
-                                | empty
+									| print_stmt ECHO ID SEMICOLON
+									| empty
     '''
     pass
 
 def p_header_declaration(p):
-    '''header_declaration: REQUIRE LPAREN STRING RPAREN SEMICOLON
-                            | REQUIRE STRING SEMICOLON'''
+    '''header_declaration : REQUIRE LPAREN STRING RPAREN SEMICOLON 
+													| REQUIRE STRING SEMICOLON
+		'''
     pass
 
 def p_class_declaration(p):
-    'class_declaration : CLASS FUNTION_NAME class_stmt'
+    'class_declaration : CLASS FUNCTION_NAME class_stmt'
     pass
 
 def p_class_stmt(p):
-    'class_stmt : LBRACE print_stmt attributes print_stmt methods print_stmt RBRACE'
+    'class_stmt : LBLOCK print_stmt attributes print_stmt methods print_stmt RBLOCK'
     pass
 
 def p_attributes1(p):
-    'attributes: attributes scope var_declaration2'
+    'attributes : attributes scope var_declaration'
     pass
 
 def p_attributes2(p):
-    'attributes: scope var_declaration2'
+    'attributes : scope var_declaration'
     pass
 
 def p_methods1(p):
-    'methods: methods scope fun_declaration'
+    'methods : methods scope fun_declaration'
     pass
 
 def p_methods2(p):
-    'methods: scope fun_declaration'
+    'methods : scope fun_declaration'
     pass
 
 def p_scope(p):
@@ -71,17 +72,17 @@ def p_scope(p):
     '''
     pass
 
-def p_var_declaration_3(p):
-    '''var_declaration2: ID SEMICOLON var_declaration2
-                                    |ID SEMICOLON
-                                    |ID EQUAL NUMBER SEMICOLON var_declaration2
-                                    |ID EQUAL NUMBER SEMICOLON
-                                    |ID EQUAL boolean SEMICOLON var_declaration2
-                                    |ID EQUAL boolean SEMICOLON
-                                    |ID EQUAL ID SEMICOLON var_declaration2
-                                    |ID EQUAL ID SEMICOLON
-                                    |AMPERSANT ID SEMICOLON var_declaration2
-                                    |AMPERSANT ID SEMICOLON
+def p_var_declaration(p):
+    '''var_declaration : ID SEMICOLON var_declaration
+												| ID SEMICOLON
+												| ID EQUAL NUMBER SEMICOLON var_declaration
+												| ID EQUAL NUMBER SEMICOLON
+												| ID EQUAL boolean SEMICOLON var_declaration
+												| ID EQUAL boolean SEMICOLON
+												| ID EQUAL ID SEMICOLON var_declaration
+												| ID EQUAL ID SEMICOLON
+												| AMPERSANT ID SEMICOLON var_declaration
+												| AMPERSANT ID SEMICOLON
     '''
     pass
 
@@ -114,11 +115,11 @@ def p_param_2(p):
 	pass
 
 def p_compount_stmt(p):
-	'compount_stmt : LBRACE print_stmt local_declarations print_stmt statement_list print_stmt RBRACE'
+	'compount_stmt : LBLOCK print_stmt local_declarations print_stmt statement_list print_stmt RBLOCK'
 	pass
 
 def p_local_declarations_1(p):
-	'local_declarations : local_declarations var_declaration2'
+	'local_declarations : local_declarations var_declaration'
 	pass
 
 def p_local_declarations_2(p):
@@ -161,7 +162,7 @@ def p_selection_stmt(p):
 	pass
 
 def p_iteration_stmt(p):
-	'''iteration_stmt : FOR LPAREN var_declaration2 SEMICOLON expression SEMICOLON additive_expression RPAREN statement 
+	'''iteration_stmt : FOR LPAREN var_declaration SEMICOLON expression SEMICOLON additive_expression RPAREN statement 
 					| WHILE LPAREN expression RPAREN statement
 	'''
 	pass
@@ -207,12 +208,12 @@ def p_simple_expression_2(p):
 	pass
 
 def p_relop(p):
-	'''relop : LT 
-			| LTE
-			| GT
-			| GTE
-			| NOT_EQUA
-			| EQUALS
+	'''relop : LESS 
+			| LESSEQUAL
+			| GREATER
+			| GREATEREQUAL
+			| DEQUAL
+			| ISEQUAL
 	'''
 	pass
 
@@ -225,11 +226,11 @@ def p_additive_expression_2(p):
 	pass
 
 def p_additive_expression_3(p):
-	'additive_expression : term DEC'
+	'additive_expression : term MINUSMINUS'
 	pass
 
 def p_additive_expression_4(p):
-	'additive_expression : term INC'
+	'additive_expression : term PLUSPLUS'
 	pass
 
 def p_addop(p):
@@ -248,7 +249,7 @@ def p_term_2(p):
 
 def p_mulop(p):
 	'''mulop : TIMES
-			| DIVISION
+			| DIVIDE
 	'''
 	pass
 
@@ -297,7 +298,7 @@ def p_boolean(p):
 	pass
 
 def p_empty(p):
-	'empty :'
+	'empty : '
 	pass
 
 def p_error(p):
@@ -305,7 +306,7 @@ def p_error(p):
 		if p is not None:
 			print ("ERROR SINTACTICO EN LA LINEA " + str(p.lexer.lineno) + " NO SE ESPERABA EL Token  " + str(p.value))
 		else:
-			print ("ERROR SINTACTICO EN LA LINEA: " + str(cminus_lexer.lexer.lineno))
+			print ("ERROR SINTACTICO EN LA LINEA: " + str(miniphp_lexer.lexer.lineno))
 	else:
 		raise Exception('syntax', 'error')
 		
@@ -317,11 +318,11 @@ if __name__ == '__main__':
 	if (len(sys.argv) > 1):
 		fin = sys.argv[1]
 	else:
-		fin = 'evaluacion.c'
+		fin = 'PRUEBA.php'
 
 	f = open(fin, 'r')
 	data = f.read()
 	#print (data)
 	parser.parse(data, tracking=True)
-	print("Amiguito, tengo el placer de informar que Tu parser reconocio correctamente todo")
+	print("El parser reconocio correctamente todo")
 	#input()
