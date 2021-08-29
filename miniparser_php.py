@@ -3,6 +3,15 @@ from miniphp_lexer import tokens
 import miniphp_lexer
 import sys
 
+
+
+# 
+# Nombres:
+#Juan David Osorio Ortiz
+# Johnatan Palacios Londoño
+# Valentina Gomez Isaza 
+
+
 VERBOSE = 1
 
 def p_program(p):
@@ -45,8 +54,16 @@ def p_class_declaration(p):
     'class_declaration : CLASS FUNCTION_NAME class_stmt'
     pass
 
-def p_class_stmt(p):
-    'class_stmt : LBLOCK print_stmt attributes print_stmt methods print_stmt RBLOCK'
+def p_class_stmt1(p):
+    'class_stmt : LBLOCK attributes methods RBLOCK'
+    pass
+
+def p_class_stmt2(p):
+    'class_stmt : LBLOCK empty RBLOCK'
+    pass
+
+def p_class_stmt3(p):
+    'class_stmt : LBLOCK attributes RBLOCK'
     pass
 
 def p_attributes1(p):

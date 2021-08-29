@@ -16,15 +16,14 @@ require('somefile.php');
   $suma = $v2 + $v3;
 }
   
-  //~ class ClaseSencilla
-//~ {
-  //~ public $var = 0;
-  //~ public $var1 = 0;
-  //~ 
-  //~ protected function mostrarVar() {
-    //~ return 0;
-  //~ }
-//~ }
+class ClaseSencilla{
+  public $var = 0;
+  public $var1 = 0;
+  
+  protected function mostrarVar() {
+    return 0;
+  }
+}
 
 function recursividad($a)
 {
@@ -53,14 +52,12 @@ function recursividad($a)
 
 class ClaseSencilla
 {
-    // Declaración de una propiedad
-    public $var = 0;
-    private $car = 0;
+  public $number = 0;
+  public $number2 = 0;
 
-    // Declaración de un método
-    public function mostrarVar() {
-        echo $this->var;
-    }
+  public function clase(){
+    echo "hola";
+  }
 }
   
 //esto es un comentario corto 
